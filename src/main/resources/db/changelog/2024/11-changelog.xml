@@ -1,0 +1,173 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="createCharacterTagTable" author="adilb">
+        <createTable tableName="character_tag">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="dt_create" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="createCharacterTagRelationTable" author="adilb">
+        <createTable tableName="character_tag_relation">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="character_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="tag_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="character_tag_relation"
+                                 baseColumnNames="character_id"
+                                 constraintName="fk_character_tag_character_id"
+                                 referencedTableName="character"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="character_tag_relation"
+                                 baseColumnNames="tag_id"
+                                 constraintName="fk_character_tag_tag_id"
+                                 referencedTableName="character_tag"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="addDtArchiveColumnToCharacterTag" author="adilb">
+        <addColumn tableName="character_tag">
+            <column name="dt_archive" type="datetime"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="dropCharacterTagRelationTable" author="adilb">
+        <renameTable oldTableName="character_tag_relation" newTableName="image_character_tag"/>
+
+        <createTable tableName="nature_character_tag">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="character_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="tag_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="nature_character_tag"
+                                 baseColumnNames="character_id"
+                                 constraintName="fk_character_tag_character_id"
+                                 referencedTableName="character"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="nature_character_tag"
+                                 baseColumnNames="tag_id"
+                                 constraintName="fk_character_tag_tag_id"
+                                 referencedTableName="character_tag"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="createNationalityTable" author="adilb">
+        <createTable tableName="nationality">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <sql>
+            insert into nationality (id, name) values(1, 'American');
+            insert into nationality (id, name) values(2, 'Korean');
+            insert into nationality (id, name) values(3, 'Russian');
+            insert into nationality (id, name) values(4, 'African');
+            insert into nationality (id, name) values(5, 'Chinese');
+            insert into nationality (id, name) values(6, 'German')
+        </sql>
+    </changeSet>
+
+    <changeSet id="addDtCreateColumnToNationality" author="adilb">
+        <addColumn tableName="nationality">
+            <column name="dt_create" type="datetime" defaultValue="2024-04-22 12:34:56">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="dt_archive" type="datetime"/>
+        </addColumn>
+
+        <dropDefaultValue tableName="nationality" columnName="dt_create"/>
+    </changeSet>
+
+    <changeSet id="addNationalityColumnToCharacter" author="adilb">
+        <addColumn tableName="character">
+            <column name="nationality_id" type="bigint" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <dropDefaultValue tableName="character" columnName="nationality_id"/>
+
+        <addForeignKeyConstraint baseTableName="character"
+                                 baseColumnNames="nationality_id"
+                                 constraintName="fk_character_nationality_id"
+                                 referencedTableName="nationality"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="addImageTypeIdToImageCharacterTagTable" author="adilb">
+        <addColumn tableName="image_character_tag">
+            <column name="image_type_id" type="bigint"/>
+        </addColumn>
+
+        <addForeignKeyConstraint baseTableName="image_character_tag"
+                                 baseColumnNames="image_type_id"
+                                 constraintName="fk_image_character_tag_image_type_id"
+                                 referencedTableName="character_image_type"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="modifyCharacterTable" author="adilb">
+        <dropColumn tableName="character" columnName="title"/>
+        <dropColumn tableName="character" columnName="text_prompt"/>
+        <dropColumn tableName="character" columnName="image_prompt"/>
+    </changeSet>
+    
+    <changeSet id="makeRequiredImageTypeIdToCharacterTagTable" author="adilb">
+        <addNotNullConstraint tableName="image_character_tag" columnName="image_type_id" defaultNullValue="1"/>
+        <dropDefaultValue tableName="image_character_tag" columnName="image_type_id"/>
+    </changeSet>
+
+    <changeSet id="removeHairLengthTable" author="">
+        <dropColumn tableName="character" columnName="hair_length_id"/>
+        <dropTable tableName="character_hair_length"/>
+    </changeSet>
+
+    <changeSet id="addUniqueToNameFields" author="adilb">
+        <addUniqueConstraint tableName="nationality" columnNames="name"/>
+        <addUniqueConstraint tableName="color_description" columnNames="name"/>
+        <addUniqueConstraint tableName="size_description" columnNames="name"/>
+        <addUniqueConstraint tableName="character_gender" columnNames="name"/>
+        <addUniqueConstraint tableName="character_tag" columnNames="name"/>
+        <addUniqueConstraint tableName="nature_character_tag" columnNames="character_id, tag_id"/>
+        <addUniqueConstraint tableName="image_character_tag" columnNames="character_id, tag_id, image_type_id"/>
+    </changeSet>
+</databaseChangeLog>

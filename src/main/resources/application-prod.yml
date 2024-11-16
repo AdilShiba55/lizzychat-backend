@@ -1,0 +1,22 @@
+app:
+  main-address: lizzychat.com
+  message-limit-enabled: true
+  post-processor-enabled: false
+  keep-last-messages-enabled: true
+  frontend:
+    url: https://${app.main-address}
+  minio:
+    url: http://minio:9000
+    get-presigned-url: https://${app.main-address}
+    login: {{MINIO_LOGIN}}
+    password: {{MINIO_PASSWORD}}
+  paypal:
+    client-id: {{PAYPAL_CLIENT_ID}}
+    client-secret: {{PAYPAL_CLIENT_SECRET}}
+    mode: live
+
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/chat
+    username: {{DB_USERNAME}}
+    password: {{DB_PASSWORD}}

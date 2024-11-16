@@ -1,0 +1,171 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet id="createPaymentTables" author="adilb">
+        <createTable tableName="payment_source">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="payment_type">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="payment">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payment_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payer_id" type="varchar(255)"/>
+            <column name="token" type="varchar(500)"/>
+            <column name="total" type="double">
+                <constraints nullable="false"/>
+            </column>
+            <column name="source_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data" type="jsonb">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dt_create" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dt_confirmed" type="datetime"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="payment"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_payment_user_id"
+                                 referencedTableName="usr"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="payment"
+                                 baseColumnNames="source_id"
+                                 constraintName="fk_payment_source_id"
+                                 referencedTableName="payment_source"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="payment"
+                                 baseColumnNames="type_id"
+                                 constraintName="fk_payment_type_id"
+                                 referencedTableName="payment_type"
+                                 referencedColumnNames="id"/>
+
+        <sql>alter sequence payment_source_id_seq restart with 1000</sql>
+        <sql>alter sequence payment_type_id_seq restart with 1000</sql>
+        <sql>alter sequence payment_id_seq restart with 1000</sql>
+
+        <loadUpdateData file="db/data/05/payment_source.csv"
+                        primaryKey="id" tableName="payment_source"/>
+
+        <loadUpdateData file="db/data/05/payment_type.csv"
+                        primaryKey="id" tableName="payment_type"/>
+    </changeSet>
+
+    <changeSet id="createPlanTables" author="adilb">
+        <createTable tableName="plan">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="usr_plan">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="plan_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dt_start" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dt_end" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payment_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="usr_plan"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_usr_plan_user_id"
+                                 referencedTableName="usr"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="usr_plan"
+                                 baseColumnNames="plan_id"
+                                 constraintName="fk_usr_plan_plan_id"
+                                 referencedTableName="plan"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="usr_plan"
+                                 baseColumnNames="payment_id"
+                                 constraintName="fk_usr_plan_payment_id"
+                                 referencedTableName="payment"
+                                 referencedColumnNames="id"/>
+
+        <sql>alter sequence plan_id_seq restart with 1000</sql>
+        <sql>alter sequence usr_plan_id_seq restart with 1000</sql>
+
+        <loadUpdateData file="db/data/05/plan.csv"
+                        primaryKey="id" tableName="plan"/>
+    </changeSet>
+
+    <changeSet id="createUserBalanceTable" author="adilb">
+        <createTable tableName="usr_crystal">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="count" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payment_id" type="bigint"/>
+            <column name="dt_create" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="usr_crystal"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_usr_crystal_user_id"
+                                 referencedTableName="usr"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="usr_crystal"
+                                 baseColumnNames="payment_id"
+                                 constraintName="fk_usr_crystal_payment_id"
+                                 referencedTableName="payment"
+                                 referencedColumnNames="id"/>
+
+        <sql>alter sequence usr_crystal_id_seq restart with 1000</sql>
+    </changeSet>
+</databaseChangeLog>

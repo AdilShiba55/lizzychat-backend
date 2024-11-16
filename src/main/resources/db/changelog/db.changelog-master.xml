@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+	    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <include file="db/changelog/2024/01-create-tables.xml"/>
+    <include file="db/changelog/2024/02-load-data.xml"/>
+    <include file="db/changelog/2024/03-create-payment-tables.xml"/>
+    <include file="db/changelog/2024/04-create-usr-password-reset-tables.xml"/>
+    <include file="db/changelog/2024/05-faq-tables.xml"/>
+    <include file="db/changelog/2024/06-changelog.xml"/>
+    <include file="db/changelog/2024/07-changelog.xml"/>
+    <include file="db/changelog/2024/08-changelog.xml"/>
+    <include file="db/changelog/2024/09-changelog.xml"/>
+    <include file="db/changelog/2024/10-changelog.xml"/>
+    <include file="db/changelog/2024/11-changelog.xml"/>
+    <include file="db/changelog/2024/12-changelog.xml"/>
+    <include file="db/changelog/2024/13-changelog.xml"/>
+    <include file="db/changelog/2024/14-changelog.xml"/>
+    <include file="db/changelog/2024/15-changelog.xml"/>
+    <include file="db/changelog/2024/16-changelog.xml"/>
+    <include file="db/changelog/2024/17-changelog.xml"/>
+    <include file="db/changelog/2024/18-changelog.xml"/>
+    <include file="db/changelog/2024/19-changelog.xml"/>
+    <include file="db/changelog/2024/20-changelog.xml"/>
+    <include file="db/changelog/2024/21-changelog.xml"/>
+    <include file="db/changelog/2024/22-changelog.xml"/>
+    <include file="db/changelog/2024/23-changelog.xml"/>
+    <include file="db/changelog/2024/24-changelog.xml"/>
+</databaseChangeLog>

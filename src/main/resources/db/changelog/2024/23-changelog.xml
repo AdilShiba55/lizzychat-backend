@@ -1,0 +1,77 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    
+    <changeSet id="addGlassesColumnToCharacter" author="adilb">
+        <addColumn tableName="character">
+            <column name="with_glasses" type="boolean" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <dropDefaultValue tableName="character" columnName="with_glasses"/>
+    </changeSet>
+
+    <changeSet id="makePregnantFieldBoolean" author="adilb">
+        <dropColumn tableName="character" columnName="dt_pregnant"/>
+        <addColumn tableName="character">
+            <column name="pregnant" type="boolean" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <dropDefaultValue tableName="character" columnName="pregnant"/>
+    </changeSet>
+
+    <changeSet id="addOccupations" author="adilb">
+        <loadUpdateData file="db/data/07/occupation-04.csv"
+                        primaryKey="id" tableName="occupation"/>
+    </changeSet>
+
+    <changeSet id="addEyesColorAndHairColors" author="adilb">
+        <loadUpdateData file="db/data/07/eyes_color-02.csv"
+                        primaryKey="id" tableName="eyes_color"/>
+
+        <loadUpdateData file="db/data/07/hair_color-02.csv"
+                        primaryKey="id" tableName="hair_color"/>
+    </changeSet>
+
+    <changeSet id="addClothesColorTable" author="adilb">
+        <createTable tableName="clothes_color">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="dt_create" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="dt_archive" type="datetime"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="addClothesColorToCharacterTable" author="adilb">
+        <loadUpdateData file="db/data/07/clothes_color-01.csv"
+                        primaryKey="id" tableName="clothes_color"/>
+
+        <addColumn tableName="character">
+            <column name="clothes_color_id" type="bigint"/>
+        </addColumn>
+
+        <addForeignKeyConstraint baseTableName="character"
+                                 baseColumnNames="clothes_color_id"
+                                 constraintName="fk_character_clothes_id"
+                                 referencedTableName="clothes_color"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="removeSecondGreenColor" author="adilb">
+        <sql>delete from clothes_color where id = 10</sql>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,50 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    
+    <changeSet id="CreateTagTypeTable" author="adilb">
+        <createTable tableName="character_tag_type">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="dt_create" type="datetime" defaultValue="2024-04-22 12:34:56">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="dt_archive" type="datetime"/>
+        </createTable>
+
+        <dropDefaultValue tableName="character_tag_type" columnName="dt_create"/>
+
+        <sql>
+            insert into character_tag_type (id, name, dt_create) values(1, 'nature', now());
+            insert into character_tag_type (id, name, dt_create) values(2, 'clothes', now());
+            insert into character_tag_type (id, name, dt_create) values(3, 'location', now());
+            insert into character_tag_type (id, name, dt_create) values(4, 'profession', now());
+            insert into character_tag_type (id, name, dt_create) values(5, 'other', now());
+        </sql>
+    </changeSet>
+
+    <changeSet id="addTagTypeColumnToTagTable" author="adilb">
+        <addColumn tableName="character_tag">
+            <column name="type_id" type="bigint" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <dropDefaultValue tableName="character_tag" columnName="type_id"/>
+
+        <addForeignKeyConstraint baseTableName="character_tag"
+                                 baseColumnNames="type_id"
+                                 constraintName="fk_character_tag_character_tag_type_id"
+                                 referencedTableName="character_tag_type"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>

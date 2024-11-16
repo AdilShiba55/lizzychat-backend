@@ -1,0 +1,79 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    
+    <changeSet id="addCharacterAnimeTypeV2" author="adilb">
+        <sql>
+            insert into character_type (id, name, dt_create) values (4, 'Anime V2', now())
+        </sql>
+    </changeSet>
+
+    <changeSet id="makeFirstAgeLookArchived" author="adilb">
+        <sql>
+            update character set age_look_id = 2 where age_look_id = 1;
+            delete from age_look where id = 1;
+        </sql>
+    </changeSet>
+
+    <changeSet id="addUserIdColumnToCharacterTable" author="adilb">
+        <addColumn tableName="character">
+            <column name="user_id" type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="createImageGenerationTable" author="adilb">
+        <createTable tableName="image_generation">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="seed" type="bigint"/>
+            <column name="cost" type="double"/>
+            <column name="dt_create" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="image_generation"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_image_generation_user_id"
+                                 referencedTableName="usr"
+                                 referencedColumnNames="id"/>
+
+        <sql>
+            insert into image_generation (id, user_id, dt_create) values(1, 1, now())
+        </sql>
+
+        <addColumn tableName="character_image">
+            <column name="generation_id" type="bigint" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <addForeignKeyConstraint baseTableName="character_image"
+                                 baseColumnNames="generation_id"
+                                 constraintName="fk_character_image_generation_id"
+                                 referencedTableName="image_generation"
+                                 referencedColumnNames="id"/>
+
+        <dropDefaultValue tableName="character_image" columnName="generation_id"/>
+    </changeSet>
+
+    <changeSet id="restartImageGenerationSequence" author="adilb">
+        <sql>alter sequence image_generation_id_seq restart with 1000</sql>
+    </changeSet>
+
+    <changeSet id="makeImageGenerationColumnNotRequired" author="adilb">
+        <dropNotNullConstraint tableName="character_image" columnName="generation_id"/>
+    </changeSet>
+
+    <changeSet id="addDtReferenceColumnToCharacter" author="adilb">
+        <addColumn tableName="character">
+            <column name="dt_reference" type="datetime"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,2 @@
+id,username,email,password,dt_create,dt_verified,dt_blocked
+1,"Admin","adil.bayalinov@mail.ru","$2a$10$T.Pnq8DA//8FDIc.7U8zBOtjY7L3dfju3ZQ210n95T4GXbWfa2aEu","2024-04-22 12:34:56",null,null

@@ -1,0 +1,125 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="addPromptColumnToImageGeneration" author="adilb">
+        <addColumn tableName="image_generation">
+            <column name="prompt" type="text" defaultValue="image was generated before adding this column">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <dropDefaultValue tableName="image_generation" columnName="prompt"/>
+    </changeSet>
+
+    <changeSet id="removeFurryOccupation" author="adilb">
+        <sql>delete from occupation where id = 18</sql>
+
+        <loadUpdateData file="db/data/07/race-02.csv"
+                        primaryKey="id" tableName="race"/>
+    </changeSet>
+
+    <changeSet id="removeElfOccupation" author="adilb">
+        <sql>delete from occupation where id = 10</sql>
+    </changeSet>
+    
+    <changeSet id="createLocationTable" author="adilb">
+        <createTable tableName="location">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="dt_create" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="dt_archive" type="datetime"/>
+        </createTable>
+
+        <loadUpdateData file="db/data/07/location-01.csv"
+                        primaryKey="id" tableName="location"/>
+
+        <sql>alter sequence location_id_seq restart with 1000</sql>
+    </changeSet>
+
+    <changeSet id="createClothesTable" author="adilb">
+        <createTable tableName="clothes">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="dt_create" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="dt_archive" type="datetime"/>
+        </createTable>
+
+        <loadUpdateData file="db/data/07/clothes-01.csv"
+                        primaryKey="id" tableName="clothes"/>
+
+        <sql>alter sequence clothes_id_seq restart with 1000</sql>
+    </changeSet>
+
+    <changeSet id="addLocationsToOccupation" author="adilb">
+        <addColumn tableName="occupation">
+            <column name="routine_clothes_id" type="bigint" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="routine_location_id" type="bigint" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="underwear_location_id" type="bigint" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="naked_location_id" type="bigint" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <dropDefaultValue tableName="occupation" columnName="routine_clothes_id"/>
+        <dropDefaultValue tableName="occupation" columnName="routine_location_id"/>
+        <dropDefaultValue tableName="occupation" columnName="underwear_location_id"/>
+        <dropDefaultValue tableName="occupation" columnName="naked_location_id"/>
+
+        <addForeignKeyConstraint baseTableName="occupation"
+                                 baseColumnNames="routine_clothes_id"
+                                 constraintName="fk_occupation_routine_clothes_id"
+                                 referencedTableName="clothes"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="occupation"
+                                 baseColumnNames="routine_location_id"
+                                 constraintName="fk_occupation_routine_location_id"
+                                 referencedTableName="location"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="occupation"
+                                 baseColumnNames="underwear_location_id"
+                                 constraintName="fk_occupation_underwear_location_id"
+                                 referencedTableName="location"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="occupation"
+                                 baseColumnNames="naked_location_id"
+                                 constraintName="fk_occupation_naked_location_id"
+                                 referencedTableName="location"
+                                 referencedColumnNames="id"/>
+
+        <loadUpdateData file="db/data/07/occupation-02.csv"
+                        primaryKey="id" tableName="occupation"/>
+    </changeSet>
+</databaseChangeLog>

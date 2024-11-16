@@ -1,0 +1,38 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="createUserSourceTable" author="adilb">
+        <createTable tableName="usr_source">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dt_create" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <loadUpdateData file="db/data/05/usr_source.csv"
+                        primaryKey="id" tableName="usr_source"/>
+
+        <addColumn tableName="usr">
+            <column name="source_id" type="bigint" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <addForeignKeyConstraint baseTableName="usr"
+                                 baseColumnNames="source_id"
+                                 constraintName="fk_usr_usr_source_id"
+                                 referencedTableName="usr_source"
+                                 referencedColumnNames="id"/>
+
+        <dropDefaultValue tableName="usr" columnName="source_id"/>
+
+    </changeSet>
+</databaseChangeLog>

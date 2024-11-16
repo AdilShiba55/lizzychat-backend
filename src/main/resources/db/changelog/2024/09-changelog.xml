@@ -1,0 +1,46 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="addModelIdColumnToCharacterType" author="adilb">
+        <addColumn tableName="character_type">
+            <column name="model_id" type="varchar(255)" defaultValue="something-v2-2">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <dropDefaultValue tableName="character_type" columnName="model_id"/>
+    </changeSet>
+
+    <changeSet id="addSeedColumnToCharacterImage" author="adilb">
+        <addColumn tableName="character_image">
+            <column name="seed" type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="addDtCreateColumnToCharacterImage" author="adilb">
+        <addColumn tableName="character_image">
+            <column name="dt_create" type="datetime" defaultValue="2024-04-22 12:34:56">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="removeDefaultValueOfDtCreateInCharacterImage" author="adilb">
+        <dropDefaultValue tableName="character_image" columnName="dt_create"/>
+    </changeSet>
+
+    <changeSet id="removeModelIdColumn" author="adilb">
+        <dropColumn tableName="character_type" columnName="model_id"/>
+    </changeSet>
+    
+    <changeSet id="addBasePlan" author="adilb">
+        <sql>insert into plan (id, name, text_message_limit, image_message_limit) values (2, 'Base', 20, 6)</sql>
+    </changeSet>
+
+    <changeSet id="addUserAskMessageType" author="adilb">
+        <sql>insert into message_type (id, name, dt_create) values (7, 'user_text_ask', now())</sql>
+    </changeSet>
+</databaseChangeLog>

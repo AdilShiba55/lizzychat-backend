@@ -1,0 +1,63 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://${app.main-address}:5432/chat
+    username: {{DB_USERNAME}}
+    password: {{DB_PASSWORD}}
+  liquibase:
+    change-log: db/changelog/db.changelog-master.xml
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+app:
+  google-api-url: https://www.googleapis.com
+  main-address: localhost
+  register-crystal-count: 50
+  message-limit-enabled: false
+  post-processor-enabled: false
+  keep-last-messages-enabled: true
+  frontend:
+    url: http://${app.main-address}:5173
+    payment-success-page: ${app.frontend.url}/payment/confirm
+  avatar-size-limit: 2
+  minio:
+    url: http://${app.main-address}:9000
+    get-presigned-url: ${app.minio.url}
+    login: {{MINIO_LOGIN}}
+    password: {{MINIO_PASSWORD}}
+    url-live: 6
+    buckets:
+      users: users
+      characters: characters
+  email:
+    sender: lizzychat.ai@gmail.com
+    password: {{LIZZYCHAT_EMAIL_PASSWORD}}
+    verification-limit: 60
+    password-reset-limit: 60
+    enabled: true
+  jwt:
+    secret: {{JWT_SECRET}}
+  chat-ai:
+    url: https://api.fireworks.ai/inference/v1/
+    api-key: {{FIREWORKS_API_KEY}}
+    model-name: accounts/fireworks/models/mixtral-8x7b-instruct
+    model-temperature: 0.8
+  instruct-ai:
+    url: ${app.chat-ai.url}
+    api-key: ${app.chat-ai.api-key}
+    model-name: ${app.chat-ai.model-name}
+    model-temperature: 0.5
+  paypal:
+    client-id: {{PAYPAL_CLIENT_ID}}
+    client-secret: {{PAYPAL_CLIENT_SECRET}}
+    mode: sandbox
+  evenlabs:
+    url: https://api.elevenlabs.io
+    api-key: {{EVENLABS_API_KEY}}
+  getimg:
+    url: https://api.getimg.ai
+    api-key: {{GETIMG_API_KEY}}

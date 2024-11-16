@@ -1,0 +1,234 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="removeNationalityTable" author="adilb">
+        <dropColumn tableName="character" columnName="nationality_id"/>
+        <dropTable tableName="nationality"/>
+    </changeSet>
+
+    <changeSet id="removeSizeDescriptionTable" author="adilb">
+        <dropColumn tableName="character" columnName="breast_size_id"/>
+        <dropTable tableName="size_description"/>
+    </changeSet>
+
+    <changeSet id="removeColorDescriptionTable" author="adilb">
+        <dropColumn tableName="character" columnName="hair_color_id"/>
+        <dropColumn tableName="character" columnName="eyes_color_id"/>
+        <dropColumn tableName="character" columnName="hair_length_id"/>
+        <dropTable tableName="color_description"/>
+        <dropTable tableName="length_description"/>
+    </changeSet>
+
+    <changeSet id="addEthnicityTable" author="adilb">
+        <createTable tableName="ethnicity">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="dt_create" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="dt_archive" type="datetime"/>
+        </createTable>
+
+        <loadUpdateData file="db/data/07/ethnicity-01.csv"
+                        primaryKey="id" tableName="ethnicity"/>
+
+        <addColumn tableName="character">
+            <column name="ethnicity_id" type="bigint" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <dropDefaultValue tableName="character" columnName="ethnicity_id"/>
+
+        <addForeignKeyConstraint baseTableName="character"
+                                 baseColumnNames="ethnicity_id"
+                                 constraintName="fk_character_ethnicity_id"
+                                 referencedTableName="ethnicity"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="createCharacterEyesColorTable" author="adilb">
+        <createTable tableName="eyes_color">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="dt_create" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="dt_archive" type="datetime"/>
+        </createTable>
+
+        <loadUpdateData file="db/data/07/eyes_color-01.csv"
+                        primaryKey="id" tableName="eyes_color"/>
+
+        <addColumn tableName="character">
+            <column name="eyes_color_id" type="bigint" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <dropDefaultValue tableName="character" columnName="eyes_color_id"/>
+
+        <addForeignKeyConstraint baseTableName="character"
+                                 baseColumnNames="eyes_color_id"
+                                 constraintName="fk_character_eyes_color_id"
+                                 referencedTableName="eyes_color"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="createCharacterHairColorTable" author="adilb">
+        <createTable tableName="hair_color">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="dt_create" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="dt_archive" type="datetime"/>
+        </createTable>
+
+        <loadUpdateData file="db/data/07/hair_color-01.csv"
+                        primaryKey="id" tableName="hair_color"/>
+
+        <addColumn tableName="character">
+            <column name="hair_color_id" type="bigint" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <dropDefaultValue tableName="character" columnName="hair_color_id"/>
+
+        <addForeignKeyConstraint baseTableName="character"
+                                 baseColumnNames="hair_color_id"
+                                 constraintName="fk_character_hair_color_id"
+                                 referencedTableName="hair_color"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="createCharacterHairStyleTable" author="adilb">
+        <createTable tableName="hair_style">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="dt_create" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="dt_archive" type="datetime"/>
+        </createTable>
+
+        <loadUpdateData file="db/data/07/hair_style-01.csv"
+                        primaryKey="id" tableName="hair_style"/>
+
+        <addColumn tableName="character">
+            <column name="hair_style_id" type="bigint" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <dropDefaultValue tableName="character" columnName="hair_style_id"/>
+
+        <addForeignKeyConstraint baseTableName="character"
+                                 baseColumnNames="hair_style_id"
+                                 constraintName="fk_character_hair_style_id"
+                                 referencedTableName="hair_style"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="createCharacterBodyTypeTable" author="adilb">
+        <createTable tableName="body_type">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="dt_create" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="dt_archive" type="datetime"/>
+        </createTable>
+
+        <loadUpdateData file="db/data/07/body_type-01.csv"
+                        primaryKey="id" tableName="body_type"/>
+
+        <addColumn tableName="character">
+            <column name="body_type_id" type="bigint" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <dropDefaultValue tableName="character" columnName="body_type_id"/>
+
+        <addForeignKeyConstraint baseTableName="character"
+                                 baseColumnNames="body_type_id"
+                                 constraintName="fk_character_body_type_id"
+                                 referencedTableName="body_type"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="createCharacterBreastSizeTable" author="adilb">
+        <createTable tableName="breast_size">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="dt_create" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="dt_archive" type="datetime"/>
+        </createTable>
+
+        <loadUpdateData file="db/data/07/breast_size-01.csv"
+                        primaryKey="id" tableName="breast_size"/>
+
+        <addColumn tableName="character">
+            <column name="breast_size_id" type="bigint" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <dropDefaultValue tableName="character" columnName="breast_size_id"/>
+
+        <addForeignKeyConstraint baseTableName="character"
+                                 baseColumnNames="breast_size_id"
+                                 constraintName="fk_character_breast_size_id"
+                                 referencedTableName="breast_size"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,32 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="loadData" author="adilb">
+        <loadUpdateData file="db/data/05/message_type.csv"
+                        primaryKey="id" tableName="message_type"/>
+
+        <loadUpdateData file="db/data/05/character_type.csv"
+                        primaryKey="id" tableName="character_type"/>
+
+        <loadUpdateData file="db/data/05/character.csv"
+                        primaryKey="id" tableName="character"/>
+
+        <loadUpdateData file="db/data/05/user.csv"
+                        primaryKey="id" tableName="usr"/>
+
+        <loadUpdateData file="db/data/05/role.csv"
+                        primaryKey="id" tableName="role"/>
+
+        <loadUpdateData file="db/data/05/usr_role.csv"
+                        primaryKey="id" tableName="usr_role"/>
+
+        <loadUpdateData file="db/data/05/character_image_type.csv"
+                        primaryKey="id" tableName="character_image_type" />
+
+        <loadUpdateData file="db/data/05/purchase_type.csv"
+                        primaryKey="id" tableName="purchase_type"/>
+    </changeSet>
+</databaseChangeLog>

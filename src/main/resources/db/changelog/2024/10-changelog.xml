@@ -1,0 +1,164 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    
+    <changeSet id="dropAudioPathColumn" author="">
+        <dropColumn tableName="message" columnName="audio_path"/>
+    </changeSet>
+
+    <changeSet id="createCharacterGenderTable" author="adilb">
+        <createTable tableName="character_gender">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <sql>
+            insert into character_gender (id, name) values (1, 'female');
+            insert into character_gender (id, name) values (2, 'male');
+        </sql>
+
+        <addColumn tableName="character">
+            <column name="gender_id" type="bigint" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <addForeignKeyConstraint baseTableName="character"
+                                 baseColumnNames="gender_id"
+                                 constraintName="fk_character_gender_gender_id"
+                                 referencedTableName="character_gender"
+                                 referencedColumnNames="id"/>
+
+        <dropDefaultValue tableName="character" columnName="gender_id"/>
+    </changeSet>
+
+    <changeSet id="createCharacterHairLength" author="adilb">
+        <createTable tableName="character_hair_length">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <sql>
+            insert into character_hair_length (id, name) values (1, 'ear');
+            insert into character_hair_length (id, name) values (2, 'chin');
+            insert into character_hair_length (id, name) values (3, 'shoulder');
+            insert into character_hair_length (id, name) values (4, 'armpit');
+            insert into character_hair_length (id, name) values (5, 'mid back');
+            insert into character_hair_length (id, name) values (6, 'tailbone');
+        </sql>
+
+        <addColumn tableName="character">
+            <column name="hair_length_id" type="bigint" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <addForeignKeyConstraint baseTableName="character"
+                                 baseColumnNames="hair_length_id"
+                                 constraintName="fk_character_hair_length_hair_length_id"
+                                 referencedTableName="character_hair_length"
+                                 referencedColumnNames="id"/>
+
+        <dropDefaultValue tableName="character" columnName="hair_length_id"/>
+    </changeSet>
+
+    <changeSet id="createColorDescriptionTable" author="adilb">
+        <createTable tableName="color_description">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <sql>
+            insert into color_description (id, name) values (1, 'light red');
+            insert into color_description (id, name) values (2, 'dark red');
+            insert into color_description (id, name) values (3, 'light blue');
+            insert into color_description (id, name) values (4, 'dark blue');
+            insert into color_description (id, name) values (5, 'light violet');
+            insert into color_description (id, name) values (6, 'dark violet');
+            insert into color_description (id, name) values (7, 'black');
+            insert into color_description (id, name) values (8, 'gray');
+            insert into color_description (id, name) values (9, 'white');
+            insert into color_description (id, name) values (10, 'light yellow');
+            insert into color_description (id, name) values (11, 'dark yellow');
+            insert into color_description (id, name) values (12, 'light brown');
+            insert into color_description (id, name) values (13, 'dark brown');
+        </sql>
+
+        <addColumn tableName="character">
+            <column name="hair_color_id" type="bigint" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <addForeignKeyConstraint baseTableName="character"
+                                 baseColumnNames="hair_color_id"
+                                 constraintName="fk_color_description_hair_color_id"
+                                 referencedTableName="color_description"
+                                 referencedColumnNames="id"/>
+
+        <dropDefaultValue tableName="character" columnName="hair_color_id"/>
+
+        <addColumn tableName="character">
+            <column name="eyes_color_id" type="bigint" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <addForeignKeyConstraint baseTableName="character"
+                                 baseColumnNames="eyes_color_id"
+                                 constraintName="fk_color_description_eyes_color_id"
+                                 referencedTableName="color_description"
+                                 referencedColumnNames="id"/>
+
+        <dropDefaultValue tableName="character" columnName="eyes_color_id"/>
+    </changeSet>
+
+    <changeSet id="createSizeDescriptionTable" author="adilb">
+        <createTable tableName="size_description">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <sql>
+            insert into size_description (id, name) values (1, 'small');
+            insert into size_description (id, name) values (2, 'medium');
+            insert into size_description (id, name) values (3, 'big');
+        </sql>
+
+        <addColumn tableName="character">
+            <column name="breast_size_id" type="bigint" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <addForeignKeyConstraint baseTableName="character"
+                                 baseColumnNames="breast_size_id"
+                                 constraintName="fk_size_description_breast_size_id"
+                                 referencedTableName="size_description"
+                                 referencedColumnNames="id"/>
+
+        <dropDefaultValue tableName="character" columnName="breast_size_id"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,16 @@
+package chat.flirtbackend.dto;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.validation.constraints.NotNull;
+
+@Getter
+@Setter
+public class CharacterImagePublicSearchDTO {
+    private Long characterImageTypeId;
+    @NotNull
+    private Integer pageNum;
+    @NotNull
+    private Integer pageSize;
+}

@@ -1,0 +1,53 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="addImagePromptToCharacter" author="adilb">
+        <renameColumn tableName="character"
+                      oldColumnName="prompt"
+                      newColumnName="text_prompt"/>
+
+        <addColumn tableName="character">
+            <column name="image_prompt" type="text" defaultValue="test">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <dropDefaultValue tableName="character" columnName="image_prompt"/>
+    </changeSet>
+
+    <changeSet id="addMessageLimitToPlan" author="adilb">
+        <addColumn tableName="plan">
+            <column name="message_limit" type="bigint" defaultValue="1500">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <dropDefaultValue tableName="plan" columnName="message_limit"/>
+    </changeSet>
+
+    <changeSet id="removeUserVoiceMessageTypeAndAddAiImageMessageType" author="adilb">
+        <sql>
+            delete from message_type where id = 2;
+            insert into message_type (id, name, dt_create) values (6, 'ai_image', now());
+        </sql>
+    </changeSet>
+
+    <changeSet id="addRoutineCharacterImageType" author="adilb">
+        <sql>
+            insert into character_image_type (id, name) values (4, 'routine')
+        </sql>
+    </changeSet>
+
+    <changeSet id="renameTextMessageLimitColumnAndAddImageMessageLimit" author="adilb">
+        <renameColumn tableName="plan" oldColumnName="message_limit" newColumnName="text_message_limit"/>
+        <addColumn tableName="plan">
+            <column name="image_message_limit" type="bigint" defaultValue="50">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <dropDefaultValue tableName="plan" columnName="image_message_limit"/>
+    </changeSet>
+</databaseChangeLog>
